@@ -1,0 +1,94 @@
+{% extends "layout.html" %} {% block body %}
+
+<div class="row">
+  <div class="col-md-6 offset-md-3">
+    <div class="col-lg-8">
+      <h3>Makaleler</h3>
+      <hr />
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6 offset-md-3">
+    <div class="col-lg-8">
+      <form method="GET">
+        {% csrf_token %}
+        <input
+          type="text"
+          name="keyword"
+          class="input-sm"
+          maxlength="65"
+          placeholder="Searhing.."
+        />
+        <button type="submit" class="btn btn-danger">Search...</button>
+      </form>
+      <br />
+    </div>
+  </div>
+</div>
+
+{% if articles %} {% for article in articles %}
+<div class="row">
+  <div class="col-md-6 offset-md-3">
+    <div class="col-lg-8">
+      <!-- Post content-->
+      <article>
+        <!-- Post header-->
+        <header class="mb-4">
+          <!-- Post title-->
+          <a href="{% url 'article:detail' article.id %}"
+            ><h2 class="fw-bolder mb-1">{{article.title}}</h2></a
+          >
+          <p class="lead">
+            {{article.author.username}} Tarafından yayınlanmıştır.
+          </p>
+          <hr />
+          <p>{{article.created_date}}</p>
+          <hr />
+          <!-- Post meta content-->
+
+          <!-- <a class="badge bg-secondary text-decoration-none link-light" href="#!"
+          >Freebies</a
+        > -->
+        </header>
+        <!-- Preview image figure-->
+        {% if article.article_image %}
+        <a href="{% url 'article:detail' article.id %}"
+          ><figure class="mb-4">
+            <img
+              class="img-fluid rounded"
+              src="{{article.article_image.url}}"
+              alt="..."
+            /></figure
+        ></a>
+
+        {% else %} {% endif %}
+
+        <!-- Post content-->
+        <section class="mb-5">
+          <p class="fs-5 mb-4">
+            {{article.content | safe | truncatewords:45 }}
+          </p>
+          <a
+            style="float: right"
+            href="{% url 'article:detail' article.id %}"
+            class="btn btn-danger"
+            >Continue read..</a
+          >
+          <hr />
+        </section>
+      </article>
+    </div>
+  </div>
+</div>
+
+{% endfor %} {% else %}
+<div class="row">
+  <div class="col-md-6 offset-md-3">
+    <div class="col-lg-8">
+      <div class="alert alert-danger">makale bulunamadı...</div>
+    </div>
+  </div>
+</div>
+
+{% endif %} {% endblock body %}

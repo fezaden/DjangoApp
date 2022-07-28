@@ -1,0 +1,93 @@
+{% extends "layout.html" %} {% block body %}
+<div class="row">
+  <div class="col-lg-8">
+    <!-- Post content-->
+    <article>
+      <!-- Post header-->
+      <header class="mb-4">
+        <!-- Post title-->
+        <h3 class="fw-bolder mb-1">{{article.title}}</h3>
+        <p class="lead">by {{article.author.user}}</p>
+        <hr />
+        <p>{{article.created_date}}</p>
+        <hr />
+        <!-- Post meta content-->
+
+        <!-- <a class="badge bg-secondary text-decoration-none link-light" href="#!"
+          >Freebies</a
+        > -->
+      </header>
+      <!-- Preview image figure-->
+      {% if article.article_image %}
+      <figure class="mb-4">
+        <img
+          class="img-fluid rounded"
+          src="{{article.article_image.url}}"
+          alt="..."
+        />
+      </figure>
+
+      {% else %} {% endif %}
+
+      <!-- Post content-->
+      <section class="mb-5">
+        <p class="fs-5 mb-4">{{article.content | safe}}</p>
+      </section>
+    </article>
+    <hr />
+    <h2>Yorumlar</h2>
+    <br>
+
+    {% if comments %} {% for comment in comments %}
+    <div class="d-flex">
+      <div class="flex-shrink-0">
+        <img
+          class="rounded-circle"
+          src="https://dummyimage.com/50x50/ced4da/6c757d.jpg"
+          alt="..."
+        />
+      </div>
+      <div class="ms-3">
+        <h4 class="fw-bold">{{comment.comment_author}}</h4>
+        {{comment.comment_date}}<br>
+        {{comment.comment_content}}
+        
+      </div>
+    </div>
+
+    {% endfor %} {% else %}
+    <div class="alert alert-danger">
+      Bu makaleye herhangi bir yorum yapılmamış, ilk yoorum yapan siz olun!
+    </div>
+    {% endif %}
+    <div class="card my-4">
+      <h5 class="card-header">Leave a Comment:</h5>
+      <form action="{% url 'article:comment' article.id %}">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="formGroupExampleInput">username</label>
+          <input
+            name="comment_author"
+            type="text"
+            class="form-control"
+            id="formGroupExampleInput"
+            placeholder="enter username..."
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="formGroupExampleInput">Example label</label>
+          <textarea
+            name="comment_content"
+            class="form-control"
+            rows="3"
+            placeholder="Join the discussion and leave a comment!"
+          ></textarea>
+        </div>
+        <button type="submit" class="btn btn-danger">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock body %}
